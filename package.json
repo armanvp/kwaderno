@@ -1,0 +1,19 @@
+{
+  "name": "kwaderno",
+  "version": "1.0.0",
+  "description": "Yet another Note app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "note"
+  ],
+  "author": "Arman Pagilagan",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.0",
+  }
+}
