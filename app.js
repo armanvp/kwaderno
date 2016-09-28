@@ -18,6 +18,10 @@ var app = express();
 // Middleware - Setup
 app.use('/api*', bodyParser.json());
 
+// Routes - Static
+app.use('/node_modules/', express.static(__dirname + '/node_modules'));
+app.use('/', express.static(__dirname + '/public'));
+
 // Routes - Setup
 app.use('/api/notebook', notebook);
 app.use('/api/note', note);

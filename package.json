@@ -12,8 +12,15 @@
   "author": "Arman Pagilagan",
   "license": "ISC",
   "dependencies": {
+    "angular": "^1.5.8",
+    "angular-animate": "^1.5.8",
+    "angular-aria": "^1.5.8",
+    "angular-material": "^1.1.1",
+    "angular-messages": "^1.5.8",
+    "angular-resource": "^1.5.8",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
-    "mongoose": "^4.6.0",
+    "material-design-icons": "^3.0.1",
+    "mongoose": "^4.6.0"
   }
 }
