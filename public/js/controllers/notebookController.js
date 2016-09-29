@@ -1,10 +1,9 @@
-app.controller('notebook', ['$scope', '$resource', 'kwadernoService', function($scope, $resource, ks) {
+app.controller('notebook', ['$scope', '$resource', '$mdToast', 'kwadernoService', function($scope, $resource, $mdToast, ks) {
 
-    var notebooksR = $resource('/api/notebook');
-    $scope.notebooks = notebooksR.query();
+    $scope.notebooks = ks.notebookR.query();
 
     $scope.selectNotebook = function(id) {
-        ks.callCallback('selectNotebook',id);
+        ks.callCallback('selectNotebook',{id:id, toast:$mdToast});
     }
 
 }]);

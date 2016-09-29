@@ -1,19 +1,24 @@
 app.service('kwadernoService', ['$resource', '$filter', '$mdDialog', '$mdToast', 'userService', function($resource, $filter, $mdDialog, $mdToast, user) {
 
-    /*- RESOURCES -*/
+    var _this = this;
+    this.notebooks = [];
+    this.notes = [];
 
-    // Notebook
-    this.notebookR= $resource('/api/notebook')
-
-    // Note
+    /*-- RESOURCES --*/
+    this.notebookR= $resource('/api/notebook/:notebookid/:notes')
     this.noteR = $resource('/api/note/:noteid', {}, { update: { method: 'PUT' } } );
+
+    /*-- DATA Services --*/
+    this.data = {
+        notebook: function get(params,options) {
+            
+        } 
+    }
 
     this.notebook = {
         id: null,
         callbacks: {}
     };
-
-    var _this = this;
 
     this.registerCallback = function(event, cb) {
         _this.notebook.callbacks[event] = cb;
@@ -29,47 +34,84 @@ app.service('kwadernoService', ['$resource', '$filter', '$mdDialog', '$mdToast',
 
     // TESTING
 
+
     /*-- SCOPE VARIABLES --*/
 
+    this.noteFn = {
+        save: this.noteR.save,
+        update: this.noteR.update
+    };
     
     // User Services
     this.user = user;
 
     /*-- SCOPE FUNCTIONS --*/
 
-    // New Note
+    // noteDialogShow - Calls the Note Dialog Box for Create, Read, Update, and Delete
     this.noteDialog = function(noteid) {
-        
-        // Show Dialog
-        $mdDialog.show({
-            controller: NoteDialogController,
-            templateUrl: 'templates/note-new.htm',
-            fullscreen: true,
-            locals: {
-                notebookR: _this.notebookR,
-                noteR: _this.noteR,
-                user: _this.user,
-                noteid: noteid
-            }
-        });
+
+        // Show main progress bar
+        _this.callCallback('progress',true);
+
+        // Get list of Notebooks
+        notebooks = _this.notebookR.query();
+
+        // Determine if noteid was specified
+        if (noteid) {
+            // Select the specified noteId
+            note = _this.noteR.get( {noteid: noteid} );
+            note.$promise
+                // Note successfully selected
+                .then(function(result) {
+                    $mdDialog.show({
+                        controller: NoteDialogController,
+                        templateUrl: 'templates/note-new.htm',
+                        fullscreen: true,
+                        locals: {
+                            notebooks: notebooks,
+                            note: note,
+                            noteFn: _this.noteFn
+                        }
+                    })
+                    .then(function(result) {
+                        _this.callCallback('progress',false);
+                    });
+                })
+                // Note cannot be selected
+                .catch(function(error) {
+                    $mdToast.show(
+                        $mdToast.simple()
+                            .textContent('Error opening the note')
+                            .hideDelay(3000)
+                    );
+                    _this.callCallback('progress',false);
+                });
+
+        } else {
+            // Set Defaults
+            note = { updateDate: new Date() };
+            // Show new note
+            $mdDialog.show({
+                controller: NoteDialogController,
+                templateUrl: 'templates/note-new.htm',
+                fullscreen: true,
+                locals: {
+                    notebooks: notebooks,
+                    note: note,
+                    noteFn: _this.noteFn
+                }
+            })
+            .then(function(result) {
+                _this.callCallback('progress',false);
+            });
+        }
 
     };
 
-    function NoteDialogController($scope, $mdDialog, $mdToast, notebookR, noteR, user, noteid) {
+    function NoteDialogController($scope, $mdDialog, $mdToast, notebooks, note, noteFn) {
 
-        /*-- SCOPE VARIABLES --*/
-        if (!noteid) {
-            // Note
-            $scope.note = {
-                tags: [],
-                author: user.user
-            }
-        } else {
-            $scope.note = noteR.get( {noteid: noteid} );
-        }
-
-        // Notebooks
-        $scope.notebooks = notebookR.query();
+        $scope.notebooks = notebooks;
+        $scope.note = note;
 
         /*-- SCOPE FUNCTIONS --*/
 
@@ -85,10 +127,10 @@ app.service('kwadernoService', ['$resource', '$filter', '$mdDialog', '$mdToast',
             var noteI = null;
 
             // SAVE Note
-            if (noteid) {
-                noteI = noteR.update({noteid: noteid}, $scope.note);    
+            if (note._id) {
+                noteI = noteFn.update({noteid: note._id}, $scope.note);    
             } else {
-                noteI = noteR.save($scope.note);
+                noteI = noteFn.save($scope.note);
             }
 
             // Determine result
