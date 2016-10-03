@@ -77,7 +77,7 @@ router.put('/:id', function(req, res) {
     updateDate: Date.now()
   };
 
-  var query = Note.findByIdAndUpdate(req.params.id, note);
+  var query = Note.findByIdAndUpdate(req.params.id, note, {new: true});
   var promise = query.exec();
 
   promise.then(

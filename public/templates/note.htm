@@ -1,0 +1,57 @@
+<md-dialog aria-label="New Note" flex="80">
+  <form name="noteForm" ng-cloak novalidate>
+    
+    <!-- TOOLBAR Start -->
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2 ng-if="note._id === undefined">New Note</h2>
+        <h2 ng-if="note._id">{{ note.title }}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-icon-set="material-icons" aria-label="Close dialog">close</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <!-- TOOLBAR End -->
+
+    <!-- DIALOG Content Start -->
+    <md-dialog-content>
+      <div class="md-dialog-content">
+
+        <md-input-container class="md-block">
+          <label>Title</label>
+          <input ng-model="note.title" ng-required="true" />
+        </md-input-container>
+
+        <md-input-container class="md-block">
+          <label>Notebook</label>
+          <md-select name="notebook" ng-model="note.notebook" ng-required="true">
+            <md-option ng-repeat="notebook in notebooks" value="{{ notebook._id }}">{{ notebook.name }}</md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container class="md-block">
+          <label>Tags</label>
+          <md-chips ng-model="note.tags"></md-chips>
+        </md-input-container>
+
+        <md-input-container class="md-block">
+          <label>Note Content</label>
+          <textarea ng-model="note.body" rows="5"></textarea>
+        </md-input-container>
+
+      </div>
+    </md-dialog-content>
+    <!-- DIALOG Content End -->
+
+    <!-- DIALOG Actions Start -->
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-progress-circular md-mode="indeterminate" ng-show="getProgress('note')"></md-progress-circular>
+      <md-button ng-click="cancel()">Cancel</md-button>
+      <md-button ng-disabled="noteForm.$invalid" ng-click="save()">Save</md-button>
+    </md-dialog-actions>
+    <!-- DIALOG Actions End -->
+
+  </form>
+</md-dialog>

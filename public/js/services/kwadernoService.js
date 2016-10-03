@@ -10,9 +10,30 @@ app.service('kwadernoService', ['$resource', '$filter', '$mdDialog', '$mdToast',
 
     /*-- DATA Services --*/
     this.data = {
-        notebook: function get(params,options) {
-            
-        } 
+        notebook: {
+            get: function (params, options, progressCb) {
+                
+                // Get All Data
+                if ( _.isEmpty(params) ) {
+
+                    // No Options or Notebooks Array is empty
+                    if ( _.isEmpty(options) || _.isEmpty(_this.notebooks) ) {
+
+
+                    // 
+                    } else {
+
+                        return _this.notebooks;
+
+                    }
+
+                // Get Data based on params
+                } else {
+
+                }
+
+            } 
+        }
     }
 
     this.notebook = {
