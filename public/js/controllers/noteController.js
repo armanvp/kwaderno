@@ -10,10 +10,12 @@ app.controller('note', ['$scope', '$resource', '$mdToast', 'kwadernoService', 'd
     function onLoad() {
         ds.on('selectNotebook', selectNotebook);
         ds.on('saveNote', saveNote);
+        ds.on('deleteNote', deleteNote);
     }
     
     function selectNotebook(event, params) {
         ps.showProgress('main');
+        vm.notebookId = params;
         ds.getNotes(params)
             .then(function(data) {
                 vm.notes = data;
@@ -34,18 +36,36 @@ app.controller('note', ['$scope', '$resource', '$mdToast', 'kwadernoService', 'd
 
         var item = vm.notes.find(function(item, idx) {
             if(item._id === note._id) {
-                vm.notes[idx] = note;
+                if(vm.notebookId === note.notebook) {
+                    vm.notes[idx] = note;
+                } else {
+                    vm.notes.splice(idx, 1);
+                }
+                
                 return true;
             }
             return false;
         });
 
         if (!item) {
-            vm.notes.push(note);
+            if (vm.notebookId === note.notebook) {
+                vm.notes.push(note);
+            } 
         }
 
         vm.notes.sort(ds.sortNoteFn);
 
+    }
+
+    function deleteNote(event, noteId) {
+        vm.notes.find(function(item, idx) {
+            if (item._id === noteId) {
+                vm.notes.splice(idx, 1);
+                return true;
+            } else {
+                return false;
+            }
+        });
     }
 
 }]);

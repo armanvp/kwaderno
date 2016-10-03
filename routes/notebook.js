@@ -47,6 +47,7 @@ router.post('/', function(req, res) {
   var newNotebook = new Notebook({
     name: req.body.name,
     description: req.body.description,
+    isSystem: req.body.isSystem
   });
 
   var promise = newNotebook.save();
@@ -69,9 +70,10 @@ router.put('/:id', function(req, res) {
   var notebook = {
     name: req.body.name,
     description: req.body.description,
+    isSystem: req.body.isSystem
   };
 
-  var query = Notebook.findByIdAndUpdate(req.params.id, notebook);
+  var query = Notebook.findByIdAndUpdate(req.params.id, notebook, {new: true});
   var promise = query.exec();
 
   promise.then(

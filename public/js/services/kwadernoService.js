@@ -1,191 +1,43 @@
-app.service('kwadernoService', ['$resource', '$filter', '$mdDialog', '$mdToast', 'userService', function($resource, $filter, $mdDialog, $mdToast, user) {
+angular
+    .module('kwaderno')
+    .service('kwadernoService', kwadernoService);
 
-    var _this = this;
-    this.notebooks = [];
-    this.notes = [];
+kwadernoService.$inject = ['dataService', 'logService'];
 
-    /*-- RESOURCES --*/
-    this.notebookR= $resource('/api/notebook/:notebookid/:notes')
-    this.noteR = $resource('/api/note/:noteid', {}, { update: { method: 'PUT' } } );
+function kwadernoService(ds,ls) {
+     
+     var _this = this;
+     this.systemNotebooks = [];
 
-    /*-- DATA Services --*/
-    this.data = {
-        notebook: {
-            get: function (params, options, progressCb) {
-                
-                // Get All Data
-                if ( _.isEmpty(params) ) {
+     var services = {
+         loadConfig: loadConfig,
+         getSystemNotebook: getSystemNotebook
+     };
 
-                    // No Options or Notebooks Array is empty
-                    if ( _.isEmpty(options) || _.isEmpty(_this.notebooks) ) {
+     return services;
 
+     function loadConfig() {
 
-                    // 
-                    } else {
-
-                        return _this.notebooks;
-
+         return ds.getNotebooks()
+            .then(function(data) {
+                data.find(function(e,i) {
+                    if(e.isSystem) {
+                        _this.systemNotebooks.push(e);
                     }
-
-                // Get Data based on params
-                } else {
-
-                }
-
-            } 
-        }
-    }
-
-    this.notebook = {
-        id: null,
-        callbacks: {}
-    };
-
-    this.registerCallback = function(event, cb) {
-        _this.notebook.callbacks[event] = cb;
-    }
-
-    this.callCallback = function(event, param) {
-        _this.notebook.callbacks[event](param);
-    }
-
-    this.prettyDate = function(date) {
-        return $filter('date')(date,'medium');
-    }
-
-    // TESTING
-
-
-    /*-- SCOPE VARIABLES --*/
-
-    this.noteFn = {
-        save: this.noteR.save,
-        update: this.noteR.update
-    };
-    
-    // User Services
-    this.user = user;
-
-    /*-- SCOPE FUNCTIONS --*/
-
-    // noteDialogShow - Calls the Note Dialog Box for Create, Read, Update, and Delete
-    this.noteDialog = function(noteid) {
-
-        // Show main progress bar
-        _this.callCallback('progress',true);
-
-        // Get list of Notebooks
-        notebooks = _this.notebookR.query();
-
-        // Determine if noteid was specified
-        if (noteid) {
-            // Select the specified noteId
-            note = _this.noteR.get( {noteid: noteid} );
-            note.$promise
-                // Note successfully selected
-                .then(function(result) {
-                    $mdDialog.show({
-                        controller: NoteDialogController,
-                        templateUrl: 'templates/note-new.htm',
-                        fullscreen: true,
-                        locals: {
-                            notebooks: notebooks,
-                            note: note,
-                            noteFn: _this.noteFn
-                        }
-                    })
-                    .then(function(result) {
-                        _this.callCallback('progress',false);
-                    });
-                })
-                // Note cannot be selected
-                .catch(function(error) {
-                    $mdToast.show(
-                        $mdToast.simple()
-                            .textContent('Error opening the note')
-                            .hideDelay(3000)
-                    );
-                    _this.callCallback('progress',false);
+                    return false;
                 });
-
-        } else {
-            // Set Defaults
-            note = { updateDate: new Date() };
-            // Show new note
-            $mdDialog.show({
-                controller: NoteDialogController,
-                templateUrl: 'templates/note-new.htm',
-                fullscreen: true,
-                locals: {
-                    notebooks: notebooks,
-                    note: note,
-                    noteFn: _this.noteFn
-                }
+                return new Promise(function(resolve, reject) {
+                    resolve();
+                });
             })
-            .then(function(result) {
-                _this.callCallback('progress',false);
+            .catch(function(error) {
+                ls.log('E', 'Error loading configuration');
             });
-        }
+     }
 
-    };
-
-    function NoteDialogController($scope, $mdDialog, $mdToast, notebooks, note, noteFn) {
-
-        $scope.notebooks = notebooks;
-        $scope.note = note;
-
-        /*-- SCOPE FUNCTIONS --*/
-
-        // CANCEL
-        $scope.cancel = $mdDialog.hide;
-
-        // SAVE
-        $scope.save = function() {
-
-            // Show Progress Circular
-            $scope.progressShow = true;
-
-            var noteI = null;
-
-            // SAVE Note
-            if (note._id) {
-                noteI = noteFn.update({noteid: note._id}, $scope.note);    
-            } else {
-                noteI = noteFn.save($scope.note);
-            }
-
-            // Determine result
-            noteI.$promise
-
-                // SAVE - Success
-                .then(function(result) {
-                    // Hide Progress Circular
-                    $scope.progressShow = false;
-                    // Hide Dialog
-                    $mdDialog.hide();
-                    // Show Success Toast
-                    $mdToast.show(
-                        $mdToast.simple()
-                            .textContent('Note saved')
-                            .hideDelay(3000)
-                    );
-                })
-
-                // SAVE - Error
-                .catch(function(error) {
-                    // Hide Progress Circular
-                    $scope.progressShow = false;
-                    // Show Error Toast
-                    $mdToast.show(
-                        $mdToast.simple()
-                            .textContent('Error saving the note')
-                            .hideDelay(3000)
-                    );
-                });
-
-        }
-
-    }
-
- 
-}]);
+     function getSystemNotebook(name) {
+         return  _this.systemNotebooks.find(function(e,i) {
+             return e.name === name;
+         });
+     }
+}

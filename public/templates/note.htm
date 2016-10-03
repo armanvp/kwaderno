@@ -4,8 +4,8 @@
     <!-- TOOLBAR Start -->
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <h2 ng-if="note._id === undefined">New Note</h2>
-        <h2 ng-if="note._id">{{ note.title }}</h2>
+        <h2 ng-if="note.title === undefined">New Note</h2>
+        <h2 ng-if="note.title">{{ note.title }}</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
           <md-icon md-icon-set="material-icons" aria-label="Close dialog">close</md-icon>
@@ -16,7 +16,7 @@
 
     <!-- DIALOG Content Start -->
     <md-dialog-content>
-      <div class="md-dialog-content">
+      <div class="md-dialog-content" ng-if="!isReadOnly()">
 
         <md-input-container class="md-block">
           <label>Title</label>
@@ -41,6 +41,13 @@
         </md-input-container>
 
       </div>
+
+      <div class="md-dialog-content" ng-if="isReadOnly()">
+        <p class="md-caption">{{ notebook.name }} / {{ prettyDate(note.updateDate) || prettyDate(note.createDate) }}</p>
+        <md-chips ng-model="note.tags" readonly="true"></md-chips>
+        <p>{{ note.body }}</p>
+
+      </div>
     </md-dialog-content>
     <!-- DIALOG Content End -->
 
@@ -48,8 +55,15 @@
     <md-dialog-actions layout="row">
       <span flex></span>
       <md-progress-circular md-mode="indeterminate" ng-show="getProgress('note')"></md-progress-circular>
-      <md-button ng-click="cancel()">Cancel</md-button>
-      <md-button ng-disabled="noteForm.$invalid" ng-click="save()">Save</md-button>
+      <md-button ng-click="del()" ng-if="!isReadOnly() && note._id !== undefined">
+        <md-icon md-icon-set="material-icons" aria-label="Delete Note">delete</md-icon>
+      </md-button>
+      <md-button ng-click="change()" ng-if="isReadOnly()">
+        <md-icon md-icon-set="material-icons" aria-label="Delete Note">input</md-icon>
+      </md-button>
+      <md-button ng-disabled="noteForm.$invalid" ng-click="save()" ng-if="!isReadOnly()">
+        <md-icon md-icon-set="material-icons" aria-label="Save Note">save</md-icon>
+      </md-button>
     </md-dialog-actions>
     <!-- DIALOG Actions End -->
 

@@ -2,11 +2,19 @@ app.controller('main', ['kwadernoService', 'dataService', 'progressService', 'di
 
     var vm = this;
     vm.getProgress = ps.getProgress;
+    vm.newNote = dgs.showNoteDialog;
 
     onLoad();
 
     function onLoad() {
-        vm.newNote = dgs.showNoteDialog;
+        ps.showProgress('main');    
+        ks.loadConfig()
+            .then(function() {
+                ps.hideProgress('main');
+            })
+            .catch(function(error) {
+                ps.hideProgress('main');
+            });
     }
 
 
