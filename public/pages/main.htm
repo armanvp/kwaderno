@@ -1,0 +1,40 @@
+<!-- App Start -->
+    <div class="container">
+
+   <div layout="row" layout-xs="column">
+
+       <!-- NOTEBOOK Start -->
+        <div flex-gt-xs="40" ng-controller="notebook as vm">
+            <md-list>
+                <md-subheader>Notebooks</md-subheader>
+                <md-divider></md-divider>
+                <md-list-item class="md-2-line" ng-repeat="notebook in vm.notebooks" ng-click="vm.selectNotebook(notebook._id)">
+                    <div class="md-list-item-text">
+                        <h3>{{notebook.name}}</h3>
+                        <p>{{notebook.description}}</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </div>
+        <!-- NOTEBOOK End -->
+
+        <!-- NOTE Start -->
+        <div flex-gt-xs="60" ng-controller="note as vm" class="note">
+            <md-list>
+                <md-subheader>Notes</md-subheader>
+                <md-divider></md-divider>
+                <md-list-item class="md-3-line" ng-repeat="note in vm.notes" ng-click="vm.selectNote(note._id)">
+                    <div class="md-list-item-text">
+                        <h3>{{note.title}}</h3>
+                        <h4>{{vm.prettyDate(note.createDate)}} / {{vm.prettyDate(note.updateDate)}}</h4>
+                        <p>{{ note.body.substr(0, 100) }}<span ng-if="note.body.length > 100"> ...</span></p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </div>
+        <!-- NOTE End -->
+
+    </div>
+
+    </div>
+    <!-- App End -->

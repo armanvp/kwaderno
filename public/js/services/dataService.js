@@ -9,7 +9,7 @@ function DataService($resource) {
     
     var services = {
         getNotebooks: getNotebooks,
-        getNotebook: getNotebook,
+        updateNotebook: updateNotebook,
         getNotes: getNotes,
         getNote: getNote,
         updateNote: updateNote,
@@ -25,8 +25,8 @@ function DataService($resource) {
         return $resource('/api/notebook').query().$promise;
     }
 
-    function getNotebook() {
-        return $resource('/api/notebook1').query().$promise;
+    function updateNotebook(notebook) {
+        return $resource('/api/notebook/:notebookId', {notebookId: notebook._id}, {update: {method: 'PUT'} }).update(notebook).$promise;
     }
 
     function getNotes(notebookId) {

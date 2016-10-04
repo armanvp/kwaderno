@@ -1,0 +1,48 @@
+<!-- App Start -->
+    <div class="container">
+
+   <div layout="row" layout-xs="column" ng-controller="notebook as vm">
+
+       <!-- NOTEBOOK Start -->
+        <div flex-gt-xs="40">
+            <md-list>
+                <md-subheader>Notebooks</md-subheader>
+                <md-divider></md-divider>
+                <md-list-item class="md-2-line" ng-repeat="notebook in vm.notebooks" ng-click="vm.selectNotebookMgt(notebook)">
+                    <div class="md-list-item-text">
+                        <h3>{{notebook.name}}</h3>
+                        <p>{{notebook.description}}</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </div>
+        <!-- NOTEBOOK End -->
+
+        <!-- NOTE Start -->
+        <div flex-gt-xs="60">
+            <md-content layout-gt-sm="row" layout-padding ng-hide="notebookForm.$invalid">
+                <form name="notebookForm" novalidate>
+                <div>
+                <md-input-container class="md-block">
+                    <label>Name</label>
+                    <input ng-model="vm.selectedNotebook.name" ng-required="true" ng-disabled="vm.selectedNotebook.isSystem">
+                </md-input-container>
+
+                <md-input-container class="md-block">
+                    <label>Description</label>
+                    <input ng-model="vm.selectedNotebook.description" ng-required="true" ng-disabled="vm.selectedNotebook.isSystem">
+                </md-input-container>
+
+                <md-button ng-disabled="notebookForm.$invalid || vm.selectedNotebook.isSystem" ng-click="vm.save()">
+                    <md-icon md-icon-set="material-icons" aria-label="Save Note">save</md-icon>
+                </md-button>
+                </form>
+                </div>
+            </md-content>
+        </div>
+        <!-- NOTE End -->
+
+    </div>
+
+    </div>
+    <!-- App End -->

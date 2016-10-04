@@ -2,6 +2,8 @@ app.controller('notebook', ['$resource', '$mdToast', 'logService', 'kwadernoServ
 
     var vm = this;
     vm.selectNotebook = selectNotebook;
+    vm.selectNotebookMgt = selectNotebookMgt;
+    vm.save = save;
 
     onLoad();
 
@@ -17,6 +19,23 @@ app.controller('notebook', ['$resource', '$mdToast', 'logService', 'kwadernoServ
 
     function selectNotebook(notebookId) {
         ds.emit('selectNotebook', notebookId);
+    }
+
+    function selectNotebookMgt(notebook) {
+        vm.selectedNotebook = notebook;
+    }
+
+    function save() {
+        ps.showProgress('main');
+        ds.updateNotebook(vm.selectedNotebook)
+            .then(function(data) {
+                ls.log('S','Notebook was successfully updated');
+                ps.hideProgress('main');
+            })
+            .catch(function(error) {
+                ls.log('E', 'Error updating the notebook');
+                ps.hideProgress('main');
+            });
     }
 
 /*
