@@ -33,7 +33,7 @@
                     <input ng-model="vm.selectedNotebook.description" ng-required="true" ng-disabled="vm.selectedNotebook.isSystem">
                 </md-input-container>
 
-                <md-button ng-click="vm.del()" ng-if="!vm.selectedNotebook.isSystem && vm.selectedNotebook._id !== undefined">
+                <md-button ng-disabled="notebookForm.$invalid" ng-click="vm.del()" ng-if="(!vm.selectedNotebook.isSystem && vm.selectedNotebook._id !== undefined)">
                     <md-icon md-icon-set="material-icons" aria-label="Delete Note">delete</md-icon>
                 </md-button>
                 <md-button ng-disabled="notebookForm.$invalid || vm.selectedNotebook.isSystem" ng-click="vm.save()">
