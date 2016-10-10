@@ -1,9 +1,9 @@
 angular.module('kwaderno')
     .controller('notebookMgtController', notebookMgtController);
 
-notebookMgtController.$inject = ['dataService'];
+notebookMgtController.$inject = ['$routeParams', 'dataService'];
 
-function notebookMgtController(ds) {
+function notebookMgtController($routeParams, ds) {
 
     var vm = this;
 

@@ -40,6 +40,24 @@ router.get('/:id', function(req, res) {
 
 });
 
+// GET One - by Notebook ID
+router.get('/notebook/:id', function(req, res) {
+
+  var query = Note.findOne({ notebook: req.params.id });
+  var promise = query.exec();
+
+  promise.then(
+    function(result) {
+      res.send(result);
+    }
+  ).catch(
+    function(err) {
+      res.send(err);
+    }
+  )
+
+});
+
 // POST - Create a Note
 router.post('/', function(req, res) {
 

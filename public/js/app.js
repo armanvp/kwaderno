@@ -9,7 +9,12 @@ app.config(['$routeProvider', function($routeProvider) {
             templateUrl: 'pages/main.htm'
         })
         // Notebook Management Page
-        .when('/notebook', {
+        .when('/notebook/', {
+            controller: 'notebookMgtController',
+            templateUrl: 'pages/notebook.htm'
+        })
+        // Notebook Management Page
+        .when('/notebook/:action', {
             controller: 'notebookMgtController',
             templateUrl: 'pages/notebook.htm'
         });

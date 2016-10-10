@@ -23,9 +23,25 @@
                         <span>Kwaderno {{ vm.toolbarTitle }}</span>
                     </h2>
                     <span flex></span>
-                    <md-button class="md-icon-button" aria-label="New Notebook" href="#notebook">
-                        <md-icon md-font-set="material-icons">library_books</md-icon>
-                    </md-button>
+                    <md-menu>
+                        <md-button class="md-icon-button" aria-label="New Notebook" ng-click="vm.openMenu($mdOpenMenu,ev)">
+                            <md-icon md-menu-origin md-font-set="material-icons">library_books</md-icon>
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button aria-label="Manage Notebook" href="#notebook" ng-click="">
+                                    <md-icon md-font-set="material-icons">library_books</md-icon>
+                                    Manage Notebook
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button aria-label="New Notebook" ng-click="vm.newNotebook()">
+                                    <md-icon md-font-set="material-icons">open_in_new</md-icon>
+                                    New Notebook
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
                     <md-button class="md-icon-button" aria-label="New Note" ng-click="vm.newNote()">
                         <md-icon md-font-set="material-icons">open_in_new</md-icon>
                     </md-button>

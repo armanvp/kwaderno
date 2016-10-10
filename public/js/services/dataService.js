@@ -10,6 +10,9 @@ function DataService($resource) {
     var services = {
         getNotebooks: getNotebooks,
         updateNotebook: updateNotebook,
+        createNotebook: createNotebook,
+        noteExistsInNotebook: noteExistsInNotebook,
+        deleteNotebook: deleteNotebook,
         getNotes: getNotes,
         getNote: getNote,
         updateNote: updateNote,
@@ -27,6 +30,18 @@ function DataService($resource) {
 
     function updateNotebook(notebook) {
         return $resource('/api/notebook/:notebookId', {notebookId: notebook._id}, {update: {method: 'PUT'} }).update(notebook).$promise;
+    }
+
+    function deleteNotebook(notebookId) {
+        return $resource('/api/notebook/:notebookId', {notebookId: notebookId}).delete().$promise;
+    }
+
+    function noteExistsInNotebook(notebookId) {
+        return $resource('/api/note/notebook/:notebookId', {notebookId: notebookId}).get().$promise;
+    }
+
+    function createNotebook(notebook) {
+        return $resource('/api/notebook').save(notebook).$promise;
     }
 
     function getNotes(notebookId) {
