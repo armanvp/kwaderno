@@ -10,8 +10,12 @@ app.controller('notebook', ['$resource', '$mdToast', 'logService', 'kwadernoServ
 
     function onLoad() {
         if($routeParams.action === 'new') {
-            vm.selectedNotebook.name = 'Untitled';
-            vm.selectedNotebook.description = 'New Notebook';
+
+            vm.selectedNotebook = {
+                name: 'Untitled',
+                description: 'New Notebook'
+            };
+
         }
 
         return ds.getNotebooks()
