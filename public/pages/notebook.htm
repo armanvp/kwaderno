@@ -20,7 +20,7 @@
 
         <!-- NOTE Start -->
         <div flex-gt-xs="60">
-            <md-content layout-gt-sm="row" layout-padding ng-hide="notebookForm.$invalid">
+            <md-content layout-gt-sm="row" layout-padding ng-hide="vm.selectedNotebook === undefined">
                 <form name="notebookForm" novalidate>
                 <div>
                 <md-input-container class="md-block">
