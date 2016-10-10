@@ -4,11 +4,11 @@ app.controller('notebook', ['$resource', '$mdToast', 'logService', 'kwadernoServ
     vm.selectNotebook = selectNotebook;
     vm.selectNotebookMgt = selectNotebookMgt;
     vm.save = save;
+    vm.del = deleteNotebook;
     vm.selectedNotebook = {
         name: '',
         description: ''
     };
-    vm.del = deleteNotebook;
 
     onLoad();
 
@@ -91,22 +91,6 @@ app.controller('notebook', ['$resource', '$mdToast', 'logService', 'kwadernoServ
             .catch(function(error) {
                 ls.log('E', error);
             });
-/*
-        vm.selectedNotebook.delete()
-            .then(function(data) {
-
-            })
-            .catch(function(error) {
-
-            });
-*/
     }
 
-
-
-/*
-    $scope.selectNotebook = function(id) {
-        ks.callCallback('selectNotebook',{id:id, toast:$mdToast});
-    }
-*/
 }]);

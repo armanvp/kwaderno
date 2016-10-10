@@ -8,6 +8,7 @@ var util = require('util');
 // Routes
 var notebook = require('./routes/notebook');
 var note = require('./routes/note');
+var install = require('./routes/install');
 
 // DB - Setup
 mongoose.Promise = Promise;
@@ -20,11 +21,14 @@ app.use('/api*', bodyParser.json());
 
 // Routes - Static
 app.use('/node_modules/', express.static(__dirname + '/node_modules'));
-app.use('/', express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 
 // Routes - Setup
 app.use('/api/notebook', notebook);
 app.use('/api/note', note);
+
+// Data Seed
+app.use('/install', install);
 
 app.listen(config.main.PORT, function() {
     util.log(`Server running at port ${ config.main.PORT }`);
