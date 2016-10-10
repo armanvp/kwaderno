@@ -5,10 +5,6 @@ app.controller('notebook', ['$resource', '$mdToast', 'logService', 'kwadernoServ
     vm.selectNotebookMgt = selectNotebookMgt;
     vm.save = save;
     vm.del = deleteNotebook;
-    vm.selectedNotebook = {
-        name: '',
-        description: ''
-    };
 
     onLoad();
 
