@@ -25,39 +25,39 @@ function DataService($resource) {
     return services;
 
     function getNotebooks() {
-        return $resource('/api/notebook').query().$promise;
+        return $resource('api/notebook').query().$promise;
     }
 
     function updateNotebook(notebook) {
-        return $resource('/api/notebook/:notebookId', {notebookId: notebook._id}, {update: {method: 'PUT'} }).update(notebook).$promise;
+        return $resource('api/notebook/:notebookId', {notebookId: notebook._id}, {update: {method: 'PUT'} }).update(notebook).$promise;
     }
 
     function deleteNotebook(notebookId) {
-        return $resource('/api/notebook/:notebookId', {notebookId: notebookId}).delete().$promise;
+        return $resource('api/notebook/:notebookId', {notebookId: notebookId}).delete().$promise;
     }
 
     function noteExistsInNotebook(notebookId) {
-        return $resource('/api/note/notebook/:notebookId', {notebookId: notebookId}).get().$promise;
+        return $resource('api/note/notebook/:notebookId', {notebookId: notebookId}).get().$promise;
     }
 
     function createNotebook(notebook) {
-        return $resource('/api/notebook').save(notebook).$promise;
+        return $resource('api/notebook').save(notebook).$promise;
     }
 
     function getNotes(notebookId) {
-        return $resource('/api/notebook/:notebookId/notes', {notebookId: notebookId}).query().$promise;
+        return $resource('api/notebook/:notebookId/notes', {notebookId: notebookId}).query().$promise;
     }
 
     function getNote(noteId) {
-        return $resource('/api/note/:noteId', {noteId: noteId}, {update: {method: 'PUT' } }).get().$promise;
+        return $resource('api/note/:noteId', {noteId: noteId}, {update: {method: 'PUT' } }).get().$promise;
     }
 
     function createNote(note) {
-        return $resource('/api/note').save(note).$promise;
+        return $resource('api/note').save(note).$promise;
     }
 
     function updateNote(note) {
-        return $resource('/api/note/:noteId', {noteId: note._id}, {update: { method: 'PUT' } } ).update(note).$promise;
+        return $resource('api/note/:noteId', {noteId: note._id}, {update: { method: 'PUT' } } ).update(note).$promise;
     }
 
     function on(event, callback) {
